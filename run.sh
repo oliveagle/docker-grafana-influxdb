@@ -7,5 +7,5 @@
 #
 
 
-docker run -d -p 80:80 -p 8083:8083 -p 8084:8084 -p 8086:8086 -v $(pwd)/data:/opt/influxdb/shared/data --name grafana-influxdb_con grafana_influxdb /usr/bin/supervisord
+docker run -d -p 80:80 -p 8083:8083 -p 8084:8084 -p 8086:8086 -p 9022:22 -v $(pwd)/data:/opt/influxdb/shared/data --name grafana-influxdb_con grafana_influxdb /usr/bin/supervisord
 

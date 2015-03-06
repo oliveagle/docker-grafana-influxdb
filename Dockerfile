@@ -72,6 +72,7 @@ ADD		./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # SSHD
 RUN mkdir -p /var/run/sshd
+RUN mkdir -p /var/log/easydeploy
 
 # ----------- #
 #   Cleanup   #
