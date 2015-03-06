@@ -1,20 +1,27 @@
-FROM	ubuntu:14.04
+#FROM	ubuntu:14.04
+FROM ubuntu:12.04
 
 ENV GRAFANA_VERSION 1.9.1
-ENV INFLUXDB_VERSION 0.8.8
+#ENV INFLUXDB_VERSION 0.8.8
+ENV INFLUXDB_VERSION 0.9.0-rc7
 
 # Prevent some error messages
 ENV DEBIAN_FRONTEND noninteractive
 
 #RUN		echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty universe' >> /etc/apt/sources.list
-RUN		apt-get -y update && apt-get -y upgrade
+COPY sources.list /etc/apt/
+
+RUN rm /etc/apt/sources.list.d/*
+RUN apt-get -y update
+#RUN		apt-get -y update && apt-get -y upgrade
+
 
 # ---------------- #
 #   Installation   #
 # ---------------- #
 
 # Install all prerequisites
-RUN 	apt-get -y install wget nginx-light supervisor curl
+RUN 	apt-get -y install wget nginx-light supervisor curl ssh
 
 #RUN 	apt-get -y install software-properties-common
 #RUN		add-apt-repository -y ppa:chris-lea/node.js && apt-get -y update
@@ -30,6 +37,8 @@ RUN		mkdir -p src/grafana && cd src/grafana && \
 RUN		wget http://s3.amazonaws.com/influxdb/influxdb_${INFLUXDB_VERSION}_amd64.deb && \
 			dpkg -i influxdb_${INFLUXDB_VERSION}_amd64.deb && rm influxdb_${INFLUXDB_VERSION}_amd64.deb
  
+ ADD olemac_rsa.pub /root/.ssh/authorized_keys 
+
 # ----------------- #
 #   Configuration   #
 # ----------------- #
@@ -53,11 +62,16 @@ ADD		./grafana/config.js /src/grafana/config.js
 ADD		./configure.sh /configure.sh
 ADD		./set_grafana.sh /set_grafana.sh
 ADD		./set_influxdb.sh /set_influxdb.sh
-RUN		chmod +x /*.sh && ./configure.sh
+#RUN		chmod +x /*.sh && ./configure.sh
+#RUN		chmod +x /configure.sh && ./configure.sh
+RUN		sh ./configure.sh
 
 # Configure nginx and supervisord
 ADD		./nginx/nginx.conf /etc/nginx/nginx.conf
 ADD		./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# SSHD
+RUN mkdir -p /var/run/sshd
 
 # ----------- #
 #   Cleanup   #
@@ -71,6 +85,7 @@ RUN		apt-get autoremove -y wget curl && \
 #   Expose Ports   #
 # ---------------- #
 
+EXPOSE 22
 # Grafana
 EXPOSE	80
 
@@ -87,4 +102,4 @@ EXPOSE	8084
 #   Run!   #
 # -------- #
 
-CMD		["/usr/bin/supervisord"]
+CMD     ["/usr/bin/supervisord"]

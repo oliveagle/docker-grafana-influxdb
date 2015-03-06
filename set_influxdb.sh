@@ -71,9 +71,9 @@ else
     curl -s -k -X POST -d "{\"name\":\"${INFLUXDB_GRAFANA_USER}\",\"password\":\"${INFLUXDB_GRAFANA_PW}\"}" $(echo ${API_URL}'/db/grafana/users?u=root&p=root')
     echo ""
     
-    echo "=> Changing Password for User: root"
-    curl -s -k -X POST -d "{\"password\":\"${ROOT_PW}\"}" $(echo ${API_URL}'/cluster_admins/root?u=root&p=root')
-    echo ""
+    # echo "=> Changing Password for User: root"
+    # curl -s -k -X POST -d "{\"password\":\"${ROOT_PW}\"}" $(echo ${API_URL}'/cluster_admins/root?u=root&p=root')
+    # echo ""
 
     touch "/.influxdb_configured"
     exit 0
