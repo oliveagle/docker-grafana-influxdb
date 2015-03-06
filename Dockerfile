@@ -100,6 +100,8 @@ EXPOSE	8086
 # InfluxDB HTTPS API
 EXPOSE	8084
 
+# influxdb cannot open volume form outsize of docker container, so `-v /local/dir:/tmp/influxdb` will
+# cause influxdb crash on start.  
 VOLUME ["/tmp/influxdb"]
 # -------- #
 #   Run!   #
