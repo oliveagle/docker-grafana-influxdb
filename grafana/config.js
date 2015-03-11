@@ -21,7 +21,7 @@ define(['settings'], function(Settings) {
       datasources: {
         data: {
           type: 'influxdb',
-          url: "http://dockerhost:8086/db/data",
+          url: "http://dockerhost:8086/db/metrics",
           username: '<--DATA_USER-->',
           password: '<--DATA_PW-->',
         },

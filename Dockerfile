@@ -2,8 +2,7 @@
 FROM ubuntu:12.04
 
 ENV GRAFANA_VERSION 1.9.1
-#ENV INFLUXDB_VERSION 0.8.8
-ENV INFLUXDB_VERSION 0.9.0-rc7
+ENV INFLUXDB_VERSION 0.8.8
 
 # Prevent some error messages
 ENV DEBIAN_FRONTEND noninteractive
@@ -48,11 +47,11 @@ ADD		influxdb/config.toml /etc/influxdb/config.toml
 ADD		influxdb/run.sh /usr/local/bin/run_influxdb
 RUN		chmod +x /usr/local/bin/run_influxdb
 # These two databases have to be created. These variables are used by set_influxdb.sh and set_grafana.sh
-ENV		PRE_CREATE_DB data grafana
-ENV		INFLUXDB_DATA_USER data
-ENV		INFLUXDB_DATA_PW data
-ENV		INFLUXDB_GRAFANA_USER grafana
-ENV		INFLUXDB_GRAFANA_PW grafana
+ENV		PRE_CREATE_DB metrics grafana
+ENV		INFLUXDB_DATA_USER root
+ENV		INFLUXDB_DATA_PW root
+ENV		INFLUXDB_GRAFANA_USER root
+ENV		INFLUXDB_GRAFANA_PW root
 ENV		ROOT_PW root
 
 # Configure Grafana
@@ -102,7 +101,7 @@ EXPOSE	8084
 
 # influxdb cannot open volume form outsize of docker container, so `-v /local/dir:/tmp/influxdb` will
 # cause influxdb crash on start.  
-VOLUME ["/tmp/influxdb"]
+#VOLUME ["/tmp/influxdb"]
 # -------- #
 #   Run!   #
 # -------- #
